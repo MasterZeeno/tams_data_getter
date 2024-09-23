@@ -27,7 +27,7 @@ options.add_argument("--window-size=1920x1080")  # Set a window size
 
 DRIVER_PATH = os.getenv("CHROME_DRIVER_PATH", "/usr/bin/chromedriver")
 
-service = webdriver.ChromeService(DRIVER_PATH)
+service = webdriver.chrome.service(DRIVER_PATH)
 
 try:
     driver = webdriver.Chrome(service=service, options=options)
