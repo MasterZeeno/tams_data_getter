@@ -4,6 +4,7 @@ import requests
 import sys
 from dotenv import load_dotenv
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -27,7 +28,7 @@ options.add_argument("--window-size=1920x1080")  # Set a window size
 
 DRIVER_PATH = os.getenv("CHROME_DRIVER_PATH", "/usr/bin/chromedriver")
 
-service = webdriver.chrome.service(DRIVER_PATH)
+service = Service(DRIVER_PATH)
 
 try:
     driver = webdriver.Chrome(service=service, options=options)
