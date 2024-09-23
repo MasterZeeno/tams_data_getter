@@ -1,0 +1,54 @@
+name: Get TamsV2 data
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # 2. Set Up Docker Buildx (optional for advanced caching)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 3. Cache Docker layers (optional)
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      # 4. Build Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build --build-arg USERNAME=${{ secrets.USERNAME }} \
+          --build-arg PASSWORD=${{ secrets.PASSWORD }} \
+          --build-arg TAMS_BASE_URL=${{ secrets.TAMS_BASE_URL }} \
+          -t termux-mimic .
+
+      # 5. Run Docker Container with Environment Variables
+      - name: Run Docker Container
+        run: |
+          docker run --rm \
+            -e USERNAME=${{ secrets.USERNAME }} \
+            -e PASSWORD=${{ secrets.PASSWORD }} \
+            -e TAMS_BASE_URL=${{ secrets.TAMS_BASE_URL }} \
+            -v ${{ github.workspace }}/src/assets:/app/src/assets \
+            termux-mimic \
+            sh -c 'set -e; python3 /app/scrapper.py'
+
+
+      # 6. Upload Output Artifacts
+      - name: Upload Output Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: scraper-output
+          path: src/assets/

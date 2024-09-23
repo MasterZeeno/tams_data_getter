@@ -1,16 +1,9 @@
-import { defineConfig } from 'vite';
-import eslint from 'vite-plugin-eslint';
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   publicDir: 'public',
   root: './',
   build: {
     outDir: 'dist',
-  },
-  plugins: [
-    eslint({
-      cache: false,
-      fix: true,
-    }),
-  ],
-});
+  }
+})
