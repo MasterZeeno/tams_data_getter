@@ -22,13 +22,13 @@ options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--display=:1")
 # Uncomment the next line for headless mode
 options.add_argument("--headless")
+options.add_argument("--disable-gpu")  # Disable GPU acceleration
+options.add_argument("--window-size=1920x1080")  # Set a window size
 
-# Optional: Specify the path to the ChromeDriver if not in PATH
-# DRIVER_PATH = os.getenv("CHROME_DRIVER_PATH", "path/to/chromedriver")
-# driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=options)
+DRIVER_PATH = os.getenv("CHROME_DRIVER_PATH", "/usr/bin/chromedriver")
 
 try:
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=options)
 except Exception as e:
     print(f"Error initializing Chrome WebDriver: {e}")
     sys.exit(1)

@@ -32,15 +32,18 @@ jobs:
           docker build --build-arg USERNAME=${{ secrets.USERNAME }} \
           --build-arg PASSWORD=${{ secrets.PASSWORD }} \
           --build-arg TAMS_BASE_URL=${{ secrets.TAMS_BASE_URL }} \
+          --build-arg CHROME_DRIVER_PATH=${{ secrets.CHROME_DRIVER_PATH }} \
           -t termux-mimic .
 
       # 5. Run Docker Container with Environment Variables
       - name: Run Docker Container
         run: |
           docker run --rm \
+            --shm-size=2g \
             -e USERNAME=${{ secrets.USERNAME }} \
             -e PASSWORD=${{ secrets.PASSWORD }} \
             -e TAMS_BASE_URL=${{ secrets.TAMS_BASE_URL }} \
+            -e CHROME_DRIVER_PATH=${{ secrets.CHROME_DRIVER_PATH }} \
             -v ${{ github.workspace }}/src/assets:/app/src/assets \
             termux-mimic \
             sh -c 'set -e; python3 /app/scrapper.py'
